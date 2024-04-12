@@ -24,8 +24,4 @@
     <None Remove="..\.dockerignore" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Repositories\Implementation\" />
-  </ItemGroup>
-
 </Project>

@@ -10,6 +10,6 @@ namespace Diplom.Repositories.Interface
         Task Create(DistrictsEn district);
         Task Update(DistrictsEn district);
         Task Delete(DistrictsEn district);
-        
+        Task SaveAsync();
     }
 }
