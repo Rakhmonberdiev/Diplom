@@ -1,7 +1,10 @@
-﻿using Diplom.DTO.AuthDtos;
+﻿using Diplom.Data;
+using Diplom.DTO.AuthDtos;
 using Diplom.Services;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Diplom.Controllers
 {
@@ -10,14 +13,16 @@ namespace Diplom.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
-        public AuthController(IAuthService authService)
+        private readonly UserManager<AppUser> _userManager;
+        public AuthController(IAuthService authService, UserManager<AppUser> userManager)
         {
             _authService = authService;
+            _userManager = userManager;
         }
 
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginDto loginDto)
+        public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
         {
             if (loginDto == null)
             {
@@ -32,5 +37,23 @@ namespace Diplom.Controllers
 
         }
 
+        [HttpPost("register")]
+        public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
+        {
+            if(await UserExists(registerDto.UserName))
+            {
+                return BadRequest("Username is taken");
+            }
+            var rs = await _authService.Register(registerDto);
+            if (rs == null)
+            {
+                return BadRequest("Failed to create user.");
+            }
+            return Ok(rs);
+        }
+        private async Task<bool> UserExists(string username)
+        {
+            return await _userManager.Users.AnyAsync(x=>x.UserName == username.ToLower());
+        }
     }
 }

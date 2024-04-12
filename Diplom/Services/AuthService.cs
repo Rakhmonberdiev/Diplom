@@ -36,9 +36,34 @@ namespace Diplom.Services
             return userToReturn;
         }
 
-        public Task<UserDto> Register(RegisterDto registerDto)
+        public async Task<UserDto> Register(RegisterDto registerDto)
         {
-            throw new NotImplementedException();
+            AppUser user = new()
+            {
+                UserName = registerDto.UserName,
+                NormalizedUserName = registerDto.UserName.ToUpper(),
+                PhoneNumber = registerDto.PhoneNumber,
+                City = registerDto.City,
+            };
+
+            var userCreate = await _userManager.CreateAsync(user, registerDto.Password);
+            var token = await _tokenService.CreateToken(user);
+            if (userCreate.Succeeded)
+            {
+                var userToReturn = await _userManager.Users.SingleOrDefaultAsync(x => x.UserName == user.UserName);
+                
+                UserDto userDto = new()
+                {
+                    UserName = userToReturn.UserName,
+                    Token = token
+                };
+
+                return userDto;
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }
