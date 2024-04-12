@@ -42,6 +42,7 @@ namespace Diplom.Extensions
                 
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IAuthService, AuthService>();
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             return services;
         }
