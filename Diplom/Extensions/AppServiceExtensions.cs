@@ -1,4 +1,6 @@
 ﻿using Diplom.Data;
+using Diplom.Repositories.Implementation;
+using Diplom.Repositories.Interface;
 using Diplom.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -43,6 +45,7 @@ namespace Diplom.Extensions
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            services.AddScoped<IDistrictRepo, DistrictRepo>();
 
             return services;
         }

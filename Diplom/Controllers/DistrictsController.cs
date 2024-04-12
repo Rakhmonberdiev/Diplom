@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Diplom.DTO.DistrictDtos;
+using Diplom.Entities;
 using Diplom.Repositories.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -31,8 +32,48 @@ namespace Diplom.Controllers
 
             var districtDto = _mapper.Map<DistrictDto>(district);
 
-            return districtDto;
+            return Ok(districtDto);
+        }
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<DistrictDto>>> GetAll(string search)
+        {
+            var districts = await _districtRepo.GetAll(search);
+            var districtDtos = _mapper.Map<IEnumerable<DistrictDto>>(districts);
+            return Ok(districtDtos);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Create(DistrictCreateUpdateDto createUpdateDto)
+        {
+            var district = _mapper.Map<DistrictsEn>(createUpdateDto);
+            await _districtRepo.Create(district);
+            return CreatedAtAction(nameof(GetById), new { id = district.Id }, district);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(Guid id, DistrictCreateUpdateDto createUpdateDto)
+        {
+            var existingDistrict = await _districtRepo.GetById(id);
+            if (existingDistrict == null)
+            {
+                return NotFound();
+            }
+            var updatedDistrict = _mapper.Map(createUpdateDto,existingDistrict);
+            await _districtRepo.Update(updatedDistrict);
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var existingDistrict = await _districtRepo.GetById(id);
+            if (existingDistrict == null)
+            {
+                return NotFound();
+            }
+
+            await _districtRepo.Delete(existingDistrict);
+            return NoContent();
+        }
     }
 }
