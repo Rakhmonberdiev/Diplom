@@ -1,4 +1,6 @@
 ﻿using Diplom.Data;
+using Diplom.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Diplom.Extensions
@@ -11,6 +13,12 @@ namespace Diplom.Extensions
             {
                 opt.UseNpgsql(configuration.GetConnectionString("PostgresConnection"));
             });
+            services.AddIdentity<AppUser, IdentityRole>()
+                .AddEntityFrameworkStores<AppDbContext>()
+                .AddDefaultTokenProviders();
+                
+            services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IAuthService, AuthService>();
 
             return services;
         }
