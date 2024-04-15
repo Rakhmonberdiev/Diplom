@@ -17,6 +17,8 @@ namespace Diplom.Helpers
             CreateMap<RouteEn, RouteEnDto>()
                 .ForMember(d => d.StarPoint, o => o.MapFrom(s => s.StartPoint.Title))
                 .ForMember(d => d.EndPoint, o => o.MapFrom(s => s.EndPoint.Title));
+
+            CreateMap<RouteCreateDto, RouteEn>();
         }
     }
 }

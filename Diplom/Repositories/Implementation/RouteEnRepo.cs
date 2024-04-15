@@ -12,6 +12,13 @@ namespace Diplom.Repositories.Implementation
         {
             _db = db;
         }
+
+        public async Task Create(RouteEn route)
+        {
+            await _db.Routes.AddAsync(route);
+            await SaveAsync();
+        }
+
         public async Task<IEnumerable<RouteEn>> GetAllRoutes()
         {
             return await _db.Routes
@@ -26,6 +33,17 @@ namespace Diplom.Repositories.Implementation
                 .Include(x=>x.StartPoint)
                 .Include(x=>x.EndPoint)
                 .SingleOrDefaultAsync(x => x.Id == id);
+        }
+
+        public async Task<bool> IsRouteExist(Guid startPointId, Guid endPointId)
+        {
+            bool exist = await _db.Routes.AnyAsync(r=>r.StartPointId==startPointId && r.EndPointId==endPointId);
+            return exist;
+        }
+
+        public async Task SaveAsync()
+        {
+            await _db.SaveChangesAsync();
         }
     }
 }

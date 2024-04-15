@@ -34,5 +34,26 @@ namespace Diplom.Controllers
             var routeToReturn = _mapper.Map<RouteEnDto>(route);
             return Ok(routeToReturn);
         }
+
+
+        [HttpPost]
+        public async Task<IActionResult> Create(RouteCreateDto dto)
+        {
+            try
+            {
+                bool routeExists = await _repo.IsRouteExist(dto.StartPointId, dto.EndPointId);
+                if (routeExists)
+                {
+                    return BadRequest("Маршрут с такими начальным и конечным пунктами уже существует");
+                }
+                var map = _mapper.Map<RouteEn>(dto);
+                await _repo.Create(map);
+                return Ok("Маршрут успешно добавлен");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Произошла ошибка при добавлении маршрута: {ex.Message}");
+            }
+        } 
     }
 }

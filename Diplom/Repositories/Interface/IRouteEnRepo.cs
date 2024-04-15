@@ -6,5 +6,11 @@ namespace Diplom.Repositories.Interface
     {
         Task<IEnumerable<RouteEn>> GetAllRoutes();
         Task<RouteEn> GetRouteById(Guid id); 
+
+        Task Create(RouteEn route);
+
+        Task<bool> IsRouteExist(Guid startPointId, Guid endPointId);
+
+        Task SaveAsync();
     }
 }
