@@ -54,6 +54,27 @@ namespace Diplom.Controllers
             {
                 return StatusCode(500, $"Произошла ошибка при добавлении маршрута: {ex.Message}");
             }
-        } 
+        }
+        [HttpPut]
+        public async Task<IActionResult> Update(RouteUpdateDto dto)
+        {
+            try
+            {
+                
+                var routeExists = await _repo.GetRouteById(dto.Id);
+                if (routeExists == null)
+                {
+                    return NotFound();
+                }
+                var upd = _mapper.Map(dto, routeExists);
+                await _repo.Update(upd);
+                return NoContent();
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Произошла ошибка при редактирование маршрута: {ex.Message}");
+            }
+        }
     }
 }

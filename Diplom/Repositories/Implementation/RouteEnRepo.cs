@@ -45,5 +45,11 @@ namespace Diplom.Repositories.Implementation
         {
             await _db.SaveChangesAsync();
         }
+
+        public async Task Update(RouteEn route)
+        {
+            _db.Routes.Update(route);
+            await SaveAsync();
+        }
     }
 }
