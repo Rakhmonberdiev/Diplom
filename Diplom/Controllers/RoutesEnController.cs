@@ -76,5 +76,17 @@ namespace Diplom.Controllers
                 return StatusCode(500, $"Произошла ошибка при редактирование маршрута: {ex.Message}");
             }
         }
+
+        [HttpDelete]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var routeExists = await _repo.GetRouteById(id);
+            if (routeExists == null)
+            {
+                return NotFound();
+            }
+            await _repo.Delete(routeExists);
+            return NoContent();
+        }
     }
 }

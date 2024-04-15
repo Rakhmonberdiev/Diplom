@@ -19,6 +19,12 @@ namespace Diplom.Repositories.Implementation
             await SaveAsync();
         }
 
+        public async Task Delete(RouteEn route)
+        {
+            _db.Routes.Remove(route);
+            await SaveAsync();
+        }
+
         public async Task<IEnumerable<RouteEn>> GetAllRoutes()
         {
             return await _db.Routes

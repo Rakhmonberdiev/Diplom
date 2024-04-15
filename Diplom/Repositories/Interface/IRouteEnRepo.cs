@@ -12,6 +12,7 @@ namespace Diplom.Repositories.Interface
         Task<bool> IsRouteExist(Guid startPointId, Guid endPointId);
 
         Task Update (RouteEn route);
+        Task Delete(RouteEn route);
         Task SaveAsync();
     }
 }
