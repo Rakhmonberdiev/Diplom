@@ -13,23 +13,27 @@ namespace Diplom.Extensions
     public static class AppServiceExtensions
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
-        {
+        { 
+            // Регистрация контекста базы данных AppDbContext с использованием строки подключения из конфигурации
             services.AddDbContext<AppDbContext>(opt =>
             {
                 opt.UseNpgsql(configuration.GetConnectionString("PostgresConnection"));
             });
+
+            // Регистрация сервисов Identity для работы с пользователями и ролями
             services.AddIdentityCore<AppUser>(opt =>
             {
+                // Настройка требований пароля пользователей
                 opt.Password.RequireNonAlphanumeric = false;
                 opt.Password.RequireDigit = false;
                 opt.Password.RequireUppercase = false;
                 opt.Password.RequireLowercase = false;
             })
-                .AddRoles<IdentityRole>()
-                .AddRoleManager<RoleManager<IdentityRole>>()
-                .AddEntityFrameworkStores<AppDbContext>();
+                .AddRoles<IdentityRole>() // Регистрация ролей
+                .AddRoleManager<RoleManager<IdentityRole>>() // Регистрация менеджера ролей
+                .AddEntityFrameworkStores<AppDbContext>(); // Интеграция с базой данных через Entity Framework
 
-           
+            // Настройка аутентификации с использованием JWT Bearer-токенов
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(opt =>
                 {
@@ -41,7 +45,7 @@ namespace Diplom.Extensions
                         ValidateAudience = false
                     };
                 });
-                
+            // Регистрация сервисов и репозиториев приложения    
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
