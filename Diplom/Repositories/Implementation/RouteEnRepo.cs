@@ -19,5 +19,13 @@ namespace Diplom.Repositories.Implementation
                 .Include(x=>x.EndPoint)
                 .ToListAsync();
         }
+
+        public async Task<RouteEn> GetRouteById(Guid id)
+        {
+            return await _db.Routes
+                .Include(x=>x.StartPoint)
+                .Include(x=>x.EndPoint)
+                .SingleOrDefaultAsync(x => x.Id == id);
+        }
     }
 }

@@ -27,5 +27,12 @@ namespace Diplom.Controllers
             var routesToReturn = _mapper.Map<IEnumerable<RouteEnDto>>(routes);
             return Ok(routesToReturn);
         }
+        [HttpGet("{id}")]
+        public async Task<ActionResult<RouteEnDto>> GetRouteId(Guid id)
+        {
+            var route = await _repo.GetRouteById(id);
+            var routeToReturn = _mapper.Map<RouteEnDto>(route);
+            return Ok(routeToReturn);
+        }
     }
 }
