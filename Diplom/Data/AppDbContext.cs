@@ -29,6 +29,15 @@ namespace Diplom.Data
                 .HasOne(r => r.EndPoint)
                 .WithMany()
                 .HasForeignKey(r => r.EndPointId);
+            builder.Entity<RouteEn>().HasData(
+                new RouteEn
+                {
+                    Id = Guid.NewGuid(),
+                    Price = 120000,
+                    StartPointId = Guid.Parse("8dd63283-1bbd-4ffd-9a15-eb806c41614f"),
+                    EndPointId = Guid.Parse("92abfca3-7e4a-42d7-bc24-e3079575057a")
+                });
+
         }
     }
 }
