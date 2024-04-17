@@ -30,6 +30,17 @@ namespace Diplom.Repositories.Implementation
             return await _db.Routes
                 .Include(x=>x.StartPoint)
                 .Include(x=>x.EndPoint)
+                .OrderByDescending(x=>x.Created)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<RouteEn>> GetLast8Routes()
+        {
+           return await _db.Routes
+                .Include(x=>x.StartPoint)
+                .Include(x=>x.EndPoint)
+                .OrderByDescending(x=>x.Created)
+                .Take(8)
                 .ToListAsync();
         }
 

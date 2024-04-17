@@ -44,6 +44,17 @@ namespace Diplom.Controllers
         }
 
 
+        [HttpGet("GetAllForHome")]
+        public async Task<ActionResult<IEnumerable<RouteEnDto>>> GetAllRoutesForHome()
+        {
+          
+            var routes = await _repo.GetLast8Routes();
+
+            var routesToReturn = _mapper.Map<IEnumerable<RouteEnDto>>(routes);
+            return Ok(routesToReturn);
+        }
+
+
         // Обработчик HTTP GET запроса для получения маршрута по идентификатору
         [HttpGet("{id}")]
         public async Task<ActionResult<RouteEnDto>> GetRouteId(Guid id)

@@ -51,6 +51,7 @@ namespace Diplom.Extensions
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddScoped<IDistrictRepo, DistrictRepo>();
             services.AddScoped<IRouteEnRepo, RouteEnRepo>();
+            services.AddCors();
             return services;
         }
     }

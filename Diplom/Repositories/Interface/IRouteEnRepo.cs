@@ -5,6 +5,8 @@ namespace Diplom.Repositories.Interface
     public interface IRouteEnRepo
     {
         Task<IEnumerable<RouteEn>> GetAllRoutes();
+
+        Task<IEnumerable<RouteEn>> GetLast8Routes();
         Task<RouteEn> GetRouteById(Guid id); 
 
         Task Create(RouteEn route);
