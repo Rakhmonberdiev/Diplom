@@ -1,6 +1,7 @@
 using Diplom.Data;
 using Diplom.Data.Seed;
 using Diplom.Extensions;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -36,8 +37,10 @@ var services = scope.ServiceProvider;
 try
 {
     var db = services.GetRequiredService<AppDbContext>();
+    var userManager = services.GetRequiredService<UserManager<AppUser>>();
+    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
     await db.Database.MigrateAsync();
-    await SeedData.SeedDistricts(db);
+    await SeedData.SeedDistricts(db,userManager,roleManager);
 }
 catch(Exception ex)
 {

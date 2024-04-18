@@ -1,4 +1,5 @@
 ﻿using Diplom.Entities;
+using Microsoft.AspNetCore.Identity;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
@@ -8,7 +9,7 @@ namespace Diplom.Data.Seed
 {
     public class SeedData
     {
-        public static async Task SeedDistricts(AppDbContext dbContext)
+        public static async Task SeedDistricts(AppDbContext dbContext, UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             if(dbContext.Districts.Any())
             {
@@ -35,6 +36,22 @@ namespace Diplom.Data.Seed
                 await dbContext.Schedules.AddAsync(schedule);
                 await dbContext.SaveChangesAsync();
             }
+
+            var roles = new List<IdentityRole>
+            {
+                new IdentityRole{Name="User"},
+                new IdentityRole{Name="Admin"}
+            };
+            foreach(var role in roles)
+            {
+                await roleManager.CreateAsync(role);
+            }
+            var admin = new AppUser
+            {
+                UserName = "admin",
+            };
+            await userManager.CreateAsync(admin, "Admin123*");
+            await userManager.AddToRolesAsync(admin, new[] { "Admin", "User" });
 
         }
     }
