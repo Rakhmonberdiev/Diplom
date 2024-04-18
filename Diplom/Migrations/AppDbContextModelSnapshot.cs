@@ -131,16 +131,6 @@ namespace Diplom.Migrations
                     b.HasIndex("StartPointId");
 
                     b.ToTable("Routes");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("58aba7af-0c1c-4e83-a9eb-90dab013a0f9"),
-                            Created = new DateTime(2024, 4, 18, 19, 3, 15, 790, DateTimeKind.Utc).AddTicks(1307),
-                            EndPointId = new Guid("92abfca3-7e4a-42d7-bc24-e3079575057a"),
-                            Price = 120000,
-                            StartPointId = new Guid("8dd63283-1bbd-4ffd-9a15-eb806c41614f")
-                        });
                 });
 
             modelBuilder.Entity("Diplom.Entities.Schedule", b =>

@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Diplom.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240415101624_HasdataToRoutes")]
-    partial class HasdataToRoutes
+    [Migration("20240418200637_scheduleTable")]
+    partial class scheduleTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -134,16 +134,20 @@ namespace Diplom.Migrations
                     b.HasIndex("StartPointId");
 
                     b.ToTable("Routes");
+                });
 
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("7cd6414a-c856-47eb-ab41-d9003655e959"),
-                            Created = new DateTime(2024, 4, 15, 10, 16, 24, 645, DateTimeKind.Utc).AddTicks(289),
-                            EndPointId = new Guid("92abfca3-7e4a-42d7-bc24-e3079575057a"),
-                            Price = 120000,
-                            StartPointId = new Guid("8dd63283-1bbd-4ffd-9a15-eb806c41614f")
-                        });
+            modelBuilder.Entity("Diplom.Entities.Schedule", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Schedules");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

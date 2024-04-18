@@ -1,4 +1,7 @@
+using Diplom.Data;
+using Diplom.Data.Seed;
 using Diplom.Extensions;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,5 +31,17 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
-
+using var scope = app.Services.CreateScope();
+var services = scope.ServiceProvider;
+try
+{
+    var db = services.GetRequiredService<AppDbContext>();
+    await db.Database.MigrateAsync();
+    await SeedData.SeedDistricts(db);
+}
+catch(Exception ex)
+{
+    var logger = services.GetRequiredService<ILogger<Program>>();
+    logger.LogError(ex, "An error occurred during migration");
+}
 app.Run();
