@@ -8,13 +8,15 @@ namespace Diplom.Services
     public class AuthService : IAuthService
     {
         private readonly UserManager<AppUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ITokenService _tokenService;
        
-        public AuthService(ITokenService tokenService, UserManager<AppUser> userManager)
+        public AuthService(ITokenService tokenService, UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager)
         {
 
             _tokenService = tokenService;
             _userManager = userManager;
+            _roleManager = roleManager;
 
         }
         public async Task<UserDto> Login(LoginDto loginRequest)
@@ -59,11 +61,15 @@ namespace Diplom.Services
 
             // Создание пользователя с помощью UserManager
             var userCreate = await _userManager.CreateAsync(user, registerDto.Password);
-
+            
+            var roleInRoleManager = await _roleManager.FindByNameAsync("User");
+            // Добавление роли пользователю
+            await _userManager.AddToRoleAsync(user, roleInRoleManager.Name);
             // Создание токена для пользователя
             var token = await _tokenService.CreateToken(user);
             if (userCreate.Succeeded)
             {
+
                 // Получение созданного пользователя для возврата
                 var userToReturn = await _userManager.Users.SingleOrDefaultAsync(x => x.UserName == user.UserName);
 
