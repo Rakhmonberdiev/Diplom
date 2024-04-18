@@ -13,7 +13,7 @@ namespace Diplom.Data
 
         public DbSet<DistrictsEn> Districts { get; set; }
         public DbSet<RouteEn> Routes { get; set; }
-
+        public DbSet<Schedule> Schedules { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)

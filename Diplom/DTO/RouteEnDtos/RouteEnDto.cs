@@ -6,5 +6,6 @@
         public int Price { get; set; }
         public string StarPoint { get; set; }
         public string EndPoint { get; set; }
+        public DateTime Created { get; set; }   
     }
 }

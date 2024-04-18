@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Diplom.DTO.DistrictDtos;
 using Diplom.DTO.RouteEnDtos;
+using Diplom.DTO.ScheduleDtos;
 using Diplom.Entities;
 
 
@@ -27,6 +28,9 @@ namespace Diplom.Helpers
 
             // Маппинг из RouteUpdateDto в RouteEn
             CreateMap<RouteUpdateDto, RouteEn>();
+
+            CreateMap<Schedule, ScheduleDto>();
+            CreateMap<ScheduleCreateUpdateDto, Schedule>();
         }
     }
 }

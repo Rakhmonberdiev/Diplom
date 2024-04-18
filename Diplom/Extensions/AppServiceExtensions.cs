@@ -52,6 +52,7 @@ namespace Diplom.Extensions
             services.AddScoped<IDistrictRepo, DistrictRepo>();
             services.AddScoped<IRouteEnRepo, RouteEnRepo>();
             services.AddCors();
+            services.AddScoped<IScheduleRepo, ScheduleRepo>();
             return services;
         }
     }
