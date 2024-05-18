@@ -53,6 +53,8 @@ namespace Diplom.Extensions
             services.AddScoped<IRouteEnRepo, RouteEnRepo>();
             services.AddCors();
             services.AddScoped<IScheduleRepo, ScheduleRepo>();
+            services.AddScoped<ITicketRepo, TicketRepo>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             return services;
         }
     }

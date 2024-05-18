@@ -13,5 +13,6 @@ namespace Diplom.Entities
         public Guid ScheduleId { get; set; }
         public AppUser AppUser { get; set; }
         public string UserId { get; set; }
+        public string QRUrl { get; set; }
     }
 }
