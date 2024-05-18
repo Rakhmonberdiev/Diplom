@@ -51,7 +51,7 @@ namespace Diplom.Data.Seed
                 UserName = "admin",
             };
             await userManager.CreateAsync(admin, "Admin123*");
-            await userManager.AddToRolesAsync(admin, new[] { "Admin", "User" });
+            await userManager.AddToRolesAsync(admin, new[] { "Admin" });
 
         }
     }

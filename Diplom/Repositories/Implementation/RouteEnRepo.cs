@@ -25,13 +25,23 @@ namespace Diplom.Repositories.Implementation
             await SaveAsync();
         }
 
-        public async Task<IEnumerable<RouteEn>> GetAllRoutes()
+        public async Task<IEnumerable<RouteEn>> GetAllRoutes(string search)
         {
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                return await _db.Routes
+                    .Where(x => x.StartPoint.Title.Contains(search)||x.EndPoint.Title.Contains(search))
+                    .Include(x => x.StartPoint)
+                    .Include(x => x.EndPoint)
+                    .ToListAsync();
+            }
             return await _db.Routes
-                .Include(x=>x.StartPoint)
-                .Include(x=>x.EndPoint)
-                .OrderByDescending(x=>x.Created)
+                .Include(x => x.StartPoint)
+                .Include(x => x.EndPoint)
+                .OrderByDescending(x => x.Created)
                 .ToListAsync();
+
         }
 
         public async Task<RouteEn> GetByDistrictId(Guid fromId, Guid toId)

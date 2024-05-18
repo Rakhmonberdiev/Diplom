@@ -36,12 +36,13 @@ namespace Diplom.Controllers
         }
 
 
+
         // Обработчик HTTP GET запроса для получения всех маршрутов
         [HttpGet("GetAll")]
-        public async Task<ActionResult<IEnumerable<RouteEnDto>>> GetAllRoutes()
+        public async Task<ActionResult<IEnumerable<RouteEnDto>>> GetAllRoutes(string search)
         {
             // Получение всех маршрутов из репозитория
-            var routes = await _repo.GetAllRoutes();
+            var routes = await _repo.GetAllRoutes(search);
 
 
             // Преобразование полученных маршрутов в коллекцию объектов типа RouteEnDto
