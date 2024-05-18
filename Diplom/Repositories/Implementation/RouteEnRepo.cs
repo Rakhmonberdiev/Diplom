@@ -34,6 +34,14 @@ namespace Diplom.Repositories.Implementation
                 .ToListAsync();
         }
 
+        public async Task<RouteEn> GetByDistrictId(Guid fromId, Guid toId)
+        {
+            return await _db.Routes
+                .Include(x=>x.StartPoint)
+                .Include(x=>x.EndPoint)
+                .SingleOrDefaultAsync(r => r.StartPointId == fromId && r.EndPointId == toId);
+        }
+
         public async Task<IEnumerable<RouteEn>> GetLast8Routes()
         {
            return await _db.Routes

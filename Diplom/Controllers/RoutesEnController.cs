@@ -27,6 +27,14 @@ namespace Diplom.Controllers
             _repo = routeEnRepo;
         }
 
+        [HttpGet("GetRouteByDistrictId")]
+        public async Task<ActionResult<RouteEnDto>> GetRouteByDistrictId(Guid fromId,Guid toId)
+        {
+            var rout = await _repo.GetByDistrictId(fromId, toId);
+            var routtoReturn = _mapper.Map<RouteEnDto>(rout);
+            return Ok(routtoReturn);
+        }
+
 
         // Обработчик HTTP GET запроса для получения всех маршрутов
         [HttpGet("GetAll")]

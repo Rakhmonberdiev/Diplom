@@ -3,6 +3,7 @@ using System;
 using Diplom.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Diplom.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240518123548_newTable")]
+    partial class newTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -162,16 +165,11 @@ namespace Diplom.Migrations
                     b.Property<Guid>("ScheduleId")
                         .HasColumnType("uuid");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("text");
-
                     b.HasKey("Id");
 
                     b.HasIndex("RouteId");
 
                     b.HasIndex("ScheduleId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Tickets");
                 });
@@ -340,12 +338,6 @@ namespace Diplom.Migrations
                         .HasForeignKey("ScheduleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Diplom.Data.AppUser", "AppUser")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("AppUser");
 
                     b.Navigation("Route");
 
