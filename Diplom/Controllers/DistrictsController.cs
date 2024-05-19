@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Diplom.DTO.DistrictDtos;
 using Diplom.Entities;
+using Diplom.Extensions;
+using Diplom.Helpers;
 using Diplom.Repositories.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -42,15 +44,15 @@ namespace Diplom.Controllers
 
         // Этот метод является обработчиком HTTP GET запроса по маршруту "GetAll" с параметром "search"
         [HttpGet("GetAll")]
-        public async Task<ActionResult<IEnumerable<DistrictDto>>> GetAll(string search)
+        public async Task<ActionResult<PagedList<DistrictDto>>> GetAll([FromQuery] PaginationParams pageParams,string search)
         {
             // Получаем все районы из репозитория с использованием параметра "search"
-            var districts = await _districtRepo.GetAll(search);
+            var districts = await _districtRepo.GetAll(pageParams,search);
 
-            // Преобразуем список районов в список объектов DistrictDto с помощью AutoMapper
-            var districtDtos = _mapper.Map<IEnumerable<DistrictDto>>(districts);
-            // Возвращаем код ответа 200 "OK" и список объектов DistrictDto
-            return Ok(districtDtos);
+            Response.AddPaginationHeader(new PaginationHeader(districts.CurrentPage, districts.PageSize,
+                districts.TotalCount, districts.TotalPages));
+           
+            return Ok(districts);
         }
 
         // Обработчик HTTP POST запроса для создания нового объекта

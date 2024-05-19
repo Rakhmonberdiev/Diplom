@@ -1,5 +1,9 @@
-﻿using Diplom.Data;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using Diplom.Data;
+using Diplom.DTO.DistrictDtos;
 using Diplom.Entities;
+using Diplom.Helpers;
 using Diplom.Repositories.Interface;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,9 +12,11 @@ namespace Diplom.Repositories.Implementation
     public class DistrictRepo : IDistrictRepo
     {
         private readonly AppDbContext _context;
-        public DistrictRepo(AppDbContext dbContext)
+        private readonly IMapper _mapper;
+        public DistrictRepo(AppDbContext dbContext, IMapper mapper)
         {
             _context = dbContext;
+            _mapper = mapper;
         }
         public async Task Create(DistrictsEn district)
         {
@@ -24,13 +30,17 @@ namespace Diplom.Repositories.Implementation
             await SaveAsync();
         }
 
-        public async Task<IEnumerable<DistrictsEn>> GetAll(string search)
+        public async Task<PagedList<DistrictDto>> GetAll(PaginationParams pageParams, string search)
         {
             if(!string.IsNullOrEmpty(search))
             {
-                return await _context.Districts.Where(x=>x.Title.Contains(search)).ToListAsync();
+                var stringQuery = _context.Districts.Where(x => x.Title.ToLower().Contains(search.ToLower()))
+                    .ProjectTo<DistrictDto>(_mapper.ConfigurationProvider).AsNoTracking().OrderBy(x => x.Id);
+                return await PagedList<DistrictDto>.CreateAsync(stringQuery, pageParams.PageNumber, pageParams.PageSize);
             }
-            return await _context.Districts.ToListAsync();
+            var query = _context.Districts.ProjectTo<DistrictDto>(_mapper.ConfigurationProvider).AsNoTracking().OrderBy(x=>x.Id);
+
+            return await PagedList<DistrictDto>.CreateAsync(query, pageParams.PageNumber, pageParams.PageSize);
         }
 
         public async Task<DistrictsEn> GetById(Guid id)
