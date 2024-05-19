@@ -55,6 +55,10 @@ namespace Diplom.Extensions
             services.AddScoped<IScheduleRepo, ScheduleRepo>();
             services.AddScoped<ITicketRepo, TicketRepo>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddAuthorization(opt =>
+            {
+                opt.AddPolicy("AdminRole", policy => policy.RequireRole("Admin"));
+            });
             return services;
         }
     }

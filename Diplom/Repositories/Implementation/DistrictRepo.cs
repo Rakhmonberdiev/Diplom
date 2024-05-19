@@ -43,6 +43,13 @@ namespace Diplom.Repositories.Implementation
             return await PagedList<DistrictDto>.CreateAsync(query, pageParams.PageNumber, pageParams.PageSize);
         }
 
+        public async Task<IEnumerable<DistrictDto>> GetAllForHome()
+        {
+            var query = await _context.Districts.ToListAsync();
+            var mapping = _mapper.Map<IEnumerable<DistrictDto>>(query);
+            return mapping;
+        }
+
         public async Task<DistrictsEn> GetById(Guid id)
         {
             return await _context.Districts.FirstOrDefaultAsync(d=>d.Id == id);

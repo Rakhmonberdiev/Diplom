@@ -4,6 +4,7 @@ using Diplom.Entities;
 using Diplom.Extensions;
 using Diplom.Helpers;
 using Diplom.Repositories.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,10 +24,10 @@ namespace Diplom.Controllers
         }
 
 
-
+        [Authorize(Policy = "AdminRole")]
         // Этот метод является обработчиком HTTP GET запроса по маршруту с параметром "id"
         [HttpGet("{id}")]
-        public async Task<ActionResult<DistrictDto>> GetById(Guid id)
+        public async Task<ActionResult<DistrictsEn>> GetById(Guid id)
         {
             // Получаем район из репозитория по указанному идентификатору
             var district = await _districtRepo.GetById(id);
@@ -35,13 +36,13 @@ namespace Diplom.Controllers
             {
                 return NotFound();
             }
-            // Преобразуем район в объект DistrictDto с помощью AutoMapper
-            var districtDto = _mapper.Map<DistrictDto>(district);
+
             // Возвращаем код ответа 200 "OK" и объект DistrictDto
-            return Ok(districtDto);
+            return Ok(district);
         }
 
 
+        [Authorize(Policy = "AdminRole")]
         // Этот метод является обработчиком HTTP GET запроса по маршруту "GetAll" с параметром "search"
         [HttpGet("GetAll")]
         public async Task<ActionResult<PagedList<DistrictDto>>> GetAll([FromQuery] PaginationParams pageParams,string search)
@@ -54,7 +55,14 @@ namespace Diplom.Controllers
            
             return Ok(districts);
         }
+        [HttpGet("GetAllForHome")]
+        public async Task<ActionResult<IEnumerable<DistrictDto>>> GetAllForHome()
+        {
+            var districts = await _districtRepo.GetAllForHome();
+            return Ok(districts);
+        }
 
+        [Authorize(Policy = "AdminRole")]
         // Обработчик HTTP POST запроса для создания нового объекта
         [HttpPost]
         public async Task<IActionResult> Create(DistrictCreateUpdateDto createUpdateDto)
@@ -68,6 +76,7 @@ namespace Diplom.Controllers
             return CreatedAtAction(nameof(GetById), new { id = district.Id }, district);
         }
 
+        [Authorize(Policy = "AdminRole")]
         // Обработчик HTTP PUT запроса для обновления существующего объекта по идентификатору
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(Guid id, DistrictCreateUpdateDto createUpdateDto)
@@ -90,6 +99,7 @@ namespace Diplom.Controllers
             return NoContent();
         }
 
+        [Authorize(Policy = "AdminRole")]
         // Обработчик HTTP DELETE запроса для удаления существующего объекта по идентификатору
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)

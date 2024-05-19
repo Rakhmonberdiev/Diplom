@@ -8,6 +8,7 @@ namespace Diplom.Repositories.Interface
     public interface IDistrictRepo
     {
         Task<PagedList<DistrictDto>> GetAll(PaginationParams pageParams, string search);
+        Task<IEnumerable<DistrictDto>> GetAllForHome();
         Task<DistrictsEn> GetById(Guid id);
         Task Create(DistrictsEn district);
         Task Update(DistrictsEn district);
