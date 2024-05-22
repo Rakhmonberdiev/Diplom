@@ -79,11 +79,11 @@ namespace Diplom.Controllers
         [Authorize(Policy = "AdminRole")]
         // Обработчик HTTP PUT запроса для обновления существующего объекта по идентификатору
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(Guid id, DistrictCreateUpdateDto createUpdateDto)
+        public async Task<IActionResult> Update(Guid Id, DistrictCreateUpdateDto createUpdateDto)
         {   
             
             // Получение существующего объекта района по идентификатору
-            var existingDistrict = await _districtRepo.GetById(id);
+            var existingDistrict = await _districtRepo.GetById(Id);
 
             // Проверка, существует ли объект района
             if (existingDistrict == null)

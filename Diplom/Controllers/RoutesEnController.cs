@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
 using Diplom.DTO.RouteEnDtos;
 using Diplom.Entities;
+using Diplom.Extensions;
+using Diplom.Helpers;
 using Diplom.Repositories.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -36,20 +39,19 @@ namespace Diplom.Controllers
         }
 
 
-
+        [Authorize(Policy = "AdminRole")]
         // Обработчик HTTP GET запроса для получения всех маршрутов
         [HttpGet("GetAll")]
-        public async Task<ActionResult<IEnumerable<RouteEnDto>>> GetAllRoutes(string search)
+        public async Task<ActionResult<PagedList<RouteEnDto>>> GetAllRoutes([FromQuery] PaginationParams pageParams, string search)
         {
             // Получение всех маршрутов из репозитория
-            var routes = await _repo.GetAllRoutes(search);
+            var routes = await _repo.GetAllRoutes(pageParams,search);
 
-
-            // Преобразование полученных маршрутов в коллекцию объектов типа RouteEnDto
-            var routesToReturn = _mapper.Map<IEnumerable<RouteEnDto>>(routes);
+            Response.AddPaginationHeader(new PaginationHeader(routes.CurrentPage, routes.PageSize,
+                routes.TotalCount, routes.TotalPages));
 
             // Возвращение результата выполнения запроса с кодом 200 (OK) и коллекцией маршрутов
-            return Ok(routesToReturn);
+            return Ok(routes);
         }
 
 
@@ -63,7 +65,7 @@ namespace Diplom.Controllers
             return Ok(routesToReturn);
         }
 
-
+        [Authorize(Policy = "AdminRole")]
         // Обработчик HTTP GET запроса для получения маршрута по идентификатору
         [HttpGet("{id}")]
         public async Task<ActionResult<RouteEnDto>> GetRouteId(Guid id)
@@ -79,7 +81,7 @@ namespace Diplom.Controllers
         }
 
 
-
+        [Authorize(Policy = "AdminRole")]
         // Обработчик HTTP POST запроса для создания нового маршрута
         [HttpPost]
         public async Task<IActionResult> Create(RouteCreateDto dto)
@@ -113,13 +115,13 @@ namespace Diplom.Controllers
         }
 
         // Обработчик HTTP PUT запроса для обновления маршрута
-        [HttpPut]
-        public async Task<IActionResult> Update(RouteUpdateDto dto)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(Guid id,RouteUpdateDto dto)
         {
             try
             {
                 // Получение маршрута по указанному идентификатору
-                var routeExists = await _repo.GetRouteById(dto.Id);
+                var routeExists = await _repo.GetRouteById(id);
                 if (routeExists == null)
                 {
                     // Если маршрут не найден, возвращается код 404 (Not Found)
@@ -140,9 +142,9 @@ namespace Diplom.Controllers
                 return StatusCode(500, $"Произошла ошибка при редактирование маршрута: {ex.Message}");
             }
         }
-
+        [Authorize(Policy = "AdminRole")]
         // Обработчик HTTP DELETE запроса для удаления маршрута
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
             // Обработчик HTTP DELETE запроса для удаления маршрута

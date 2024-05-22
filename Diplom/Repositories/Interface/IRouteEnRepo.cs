@@ -1,10 +1,12 @@
-﻿using Diplom.Entities;
+﻿using Diplom.DTO.RouteEnDtos;
+using Diplom.Entities;
+using Diplom.Helpers;
 
 namespace Diplom.Repositories.Interface
 {
     public interface IRouteEnRepo
     {
-        Task<IEnumerable<RouteEn>> GetAllRoutes(string search);
+        Task<PagedList<RouteEnDto>> GetAllRoutes(PaginationParams pageParams,string search);
 
         Task<IEnumerable<RouteEn>> GetLast8Routes();
         Task<RouteEn> GetRouteById(Guid id); 

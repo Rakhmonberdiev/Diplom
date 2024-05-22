@@ -1,5 +1,9 @@
-﻿using Diplom.Data;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using Diplom.Data;
+using Diplom.DTO.RouteEnDtos;
 using Diplom.Entities;
+using Diplom.Helpers;
 using Diplom.Repositories.Interface;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,9 +12,11 @@ namespace Diplom.Repositories.Implementation
     public class RouteEnRepo : IRouteEnRepo
     {
         private readonly AppDbContext _db;
-        public RouteEnRepo(AppDbContext db)
+        private readonly IMapper _mapper;
+        public RouteEnRepo(AppDbContext db,IMapper mapper)
         {
             _db = db;
+            _mapper = mapper;
         }
 
         public async Task Create(RouteEn route)
@@ -25,23 +31,28 @@ namespace Diplom.Repositories.Implementation
             await SaveAsync();
         }
 
-        public async Task<IEnumerable<RouteEn>> GetAllRoutes(string search)
+        public async Task<PagedList<RouteEnDto>> GetAllRoutes(PaginationParams pageParams,string search)
         {
-
             if (!string.IsNullOrEmpty(search))
             {
-                return await _db.Routes
-                    .Where(x => x.StartPoint.Title.Contains(search)||x.EndPoint.Title.Contains(search))
+                var stringQuery = _db.Routes
+                    .Where(
+                    x => x.StartPoint.Title.ToLower().Contains(search.ToLower()) ||
+                    x.EndPoint.Title.ToLower().Contains(search.ToLower()))
                     .Include(x => x.StartPoint)
                     .Include(x => x.EndPoint)
-                    .ToListAsync();
+                    .ProjectTo<RouteEnDto>(_mapper.ConfigurationProvider)
+                    .AsNoTracking()
+                    .OrderByDescending(s => s.Created);
+                return await PagedList<RouteEnDto>.CreateAsync(stringQuery, pageParams.PageNumber, pageParams.PageSize);
             }
-            return await _db.Routes
-                .Include(x => x.StartPoint)
-                .Include(x => x.EndPoint)
-                .OrderByDescending(x => x.Created)
-                .ToListAsync();
-
+            var query = _db.Routes
+                .Include(x=>x.StartPoint)
+                .Include(x=>x.EndPoint)
+                .ProjectTo<RouteEnDto>(_mapper.ConfigurationProvider)
+                .AsNoTracking()
+                .OrderByDescending(_ => _.Created);
+            return await PagedList<RouteEnDto>.CreateAsync(query, pageParams.PageNumber, pageParams.PageSize);
         }
 
         public async Task<RouteEn> GetByDistrictId(Guid fromId, Guid toId)
