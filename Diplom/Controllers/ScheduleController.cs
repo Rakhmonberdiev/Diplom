@@ -2,6 +2,7 @@
 using Diplom.DTO.ScheduleDtos;
 using Diplom.Entities;
 using Diplom.Repositories.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -38,7 +39,7 @@ namespace Diplom.Controllers
             var rs = _mapper.Map<IEnumerable<ScheduleDto>>(sch);
             return Ok(rs);
         }
-
+        [Authorize(Policy = "AdminRole")]
         [HttpPost]
         public async Task<ActionResult> Create(ScheduleCreateUpdateDto dto)
         {
@@ -46,7 +47,7 @@ namespace Diplom.Controllers
             await _repo.Create(map);
             return NoContent();
         }
-
+        [Authorize(Policy = "AdminRole")]
         [HttpPut("{id}")]
         public async Task<ActionResult> Update(Guid id, ScheduleCreateUpdateDto dto)
         {
@@ -59,7 +60,7 @@ namespace Diplom.Controllers
             await _repo.Update(map);
             return NoContent();
         }
-
+        [Authorize(Policy = "AdminRole")]
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(Guid id)
         {

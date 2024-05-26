@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using QRCoder;
 using Diplom.Extensions;
+
 namespace Diplom.Repositories.Implementation
 {
     public class TicketRepo : ITicketRepo
@@ -57,6 +58,17 @@ namespace Diplom.Repositories.Implementation
             await _context.Tickets.AddAsync(model);
             await _context.SaveChangesAsync();
             return model;
+        }
+
+        public async Task<IEnumerable<Ticket>> GetAll(string userId)
+        {
+            return await _context.Tickets
+                .Where(s=>s.UserId == userId)
+                .Include(s => s.Route.StartPoint)
+                .Include(s => s.Route.EndPoint)
+                .Include(s => s.Schedule)
+                .OrderByDescending(s=>s.Date)
+                .ToListAsync();
         }
 
         public async Task<Ticket> GetById(Guid id, string userId)

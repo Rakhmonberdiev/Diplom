@@ -5,6 +5,7 @@ namespace Diplom.DTO.TicketDtos
 {
     public class TicketDto
     {
+        public Guid Id { get; set; }
         public string Date { get; set; }
         public string Start {  get; set; }
         public string End { get; set; }

@@ -34,7 +34,7 @@ namespace Diplom.Helpers
             CreateMap<ScheduleCreateUpdateDto, Schedule>();
 
             CreateMap<Ticket, TicketDto>()
-                .ForMember(d => d.Date, o => o.MapFrom(s => s.Date.ToString()))
+                .ForMember(d => d.Date, o => o.MapFrom(s => s.Date.Date))
                 .ForMember(d => d.Start, o => o.MapFrom(s => s.Route.StartPoint.Title))
                 .ForMember(d => d.End, o => o.MapFrom(s => s.Route.EndPoint.Title))
                 .ForMember(d=>d.Price, o=>o.MapFrom(s => s.Route.Price.ToString()))
