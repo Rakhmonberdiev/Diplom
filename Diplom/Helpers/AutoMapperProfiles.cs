@@ -39,6 +39,13 @@ namespace Diplom.Helpers
                 .ForMember(d => d.End, o => o.MapFrom(s => s.Route.EndPoint.Title))
                 .ForMember(d=>d.Price, o=>o.MapFrom(s => s.Route.Price.ToString()))
                 .ForMember(d=>d.Schedule,o=>o.MapFrom(s => s.Schedule.Title));
+
+            CreateMap<Ticket, TicketAdmin>()
+                .ForMember(d => d.Date, o => o.MapFrom(s => s.Date.Date))
+                .ForMember(d => d.Start, o => o.MapFrom(s => s.Route.StartPoint.Title))
+                .ForMember(d => d.End, o => o.MapFrom(s => s.Route.EndPoint.Title))
+                .ForMember(d => d.UserName, o => o.MapFrom(s => s.AppUser.UserName))
+                .ForMember(d => d.Schedule, o => o.MapFrom(s => s.Schedule.Title));
         }
     }
 }

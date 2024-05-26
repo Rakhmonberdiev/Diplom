@@ -60,6 +60,12 @@ namespace Diplom.Repositories.Implementation
             return model;
         }
 
+        public async Task Delete(Ticket route)
+        {
+            _context.Tickets.Remove(route);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<IEnumerable<Ticket>> GetAll(string userId)
         {
             return await _context.Tickets
@@ -71,6 +77,23 @@ namespace Diplom.Repositories.Implementation
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<Ticket>> GetAllAdmin(string userName)
+        {
+            IQueryable<Ticket> query = _context.Tickets
+                .Include(s => s.Route.StartPoint)
+                .Include(s => s.Route.EndPoint)
+                .Include(s => s.Schedule)
+                .Include(s => s.AppUser)
+                .OrderByDescending(s => s.Date);
+
+            if (!string.IsNullOrEmpty(userName))
+            {
+                query = query.Where(s => s.AppUser.UserName.ToLower().Contains(userName.ToLower()));
+            }
+
+            return await query.ToListAsync();
+        }
+
         public async Task<Ticket> GetById(Guid id, string userId)
         {
             return await _context.Tickets
@@ -79,6 +102,12 @@ namespace Diplom.Repositories.Implementation
                 .Include(s=>s.Route.EndPoint)
                 .Include(s=>s.Schedule)
                 .FirstOrDefaultAsync(x => x.Id==id);
+        }
+
+        public async Task<Ticket> GetForAdmin(Guid id)
+        {
+            return await _context.Tickets.FirstOrDefaultAsync(x=>x.Id==id);
+                
         }
     }
 }

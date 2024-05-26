@@ -49,5 +49,35 @@ namespace Diplom.Controllers
             return Ok(mappingToRet);
         }
 
+
+        [Authorize(Policy = "AdminRole")]
+        [HttpGet("admin")]
+        public async Task<ActionResult<IEnumerable<TicketAdmin>>> GetAllAdmin(string search)
+        {
+            var models = await _repo.GetAllAdmin(search);
+            var mapping = _mapper.Map<IEnumerable<TicketAdmin>>(models);
+            return Ok(mapping);
+        }
+
+        [Authorize(Policy = "AdminRole")]
+        // Обработчик HTTP DELETE запроса для удаления билета
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            // Обработчик HTTP DELETE запроса для удаления билета
+            var ticketExists = await _repo.GetForAdmin(id);
+
+            // Проверка, существует ли билет с указанным идентификатором
+            if (ticketExists == null)
+            {
+                // Если билет не найден, возвращается код 404 (Not Found)
+                return NotFound();
+            }
+            // Вызов метода Delete репозитория для удаления билета
+            await _repo.Delete(ticketExists);
+
+            // Возвращение кода 204 (No Content) для указания успешного выполнения операции
+            return NoContent();
+        }
     }
 }
