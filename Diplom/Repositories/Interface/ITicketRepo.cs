@@ -5,7 +5,7 @@ namespace Diplom.Repositories.Interface
 {
     public interface ITicketRepo
     {
-        Task<Ticket> GetById(Guid id);
-        Task<string> Create(TicketCreateDto ticket);
+        Task<Ticket> GetById(Guid id,string userId);
+        Task<Ticket> Create(TicketCreateDto ticket);
     }
 }

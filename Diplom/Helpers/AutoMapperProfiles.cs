@@ -2,6 +2,7 @@
 using Diplom.DTO.DistrictDtos;
 using Diplom.DTO.RouteEnDtos;
 using Diplom.DTO.ScheduleDtos;
+using Diplom.DTO.TicketDtos;
 using Diplom.Entities;
 
 
@@ -31,6 +32,13 @@ namespace Diplom.Helpers
 
             CreateMap<Schedule, ScheduleDto>();
             CreateMap<ScheduleCreateUpdateDto, Schedule>();
+
+            CreateMap<Ticket, TicketDto>()
+                .ForMember(d => d.Date, o => o.MapFrom(s => s.Date.ToString()))
+                .ForMember(d => d.Start, o => o.MapFrom(s => s.Route.StartPoint.Title))
+                .ForMember(d => d.End, o => o.MapFrom(s => s.Route.EndPoint.Title))
+                .ForMember(d=>d.Price, o=>o.MapFrom(s => s.Route.Price.ToString()))
+                .ForMember(d=>d.Schedule,o=>o.MapFrom(s => s.Schedule.Title));
         }
     }
 }

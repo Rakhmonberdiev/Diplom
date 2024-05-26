@@ -8,6 +8,7 @@ namespace Diplom.DTO.TicketDtos
         public DateTime Date { get; set; }
         public Guid RouteId { get; set; }
         public Guid ScheduleId { get; set; }
+        public string UserId { get; set; }
 
     }
 }

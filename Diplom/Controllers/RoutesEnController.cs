@@ -105,7 +105,7 @@ namespace Diplom.Controllers
                 await _repo.Create(map);
 
                 // Возвращение кода 200 (OK) с сообщением об успешном добавлении маршрута
-                return Ok("Маршрут успешно добавлен");
+                return Ok();
             }
             catch (Exception ex)
             {

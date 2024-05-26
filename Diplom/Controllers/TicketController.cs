@@ -1,5 +1,7 @@
-﻿using Diplom.DTO.TicketDtos;
+﻿using AutoMapper;
+using Diplom.DTO.TicketDtos;
 using Diplom.Entities;
+using Diplom.Extensions;
 using Diplom.Repositories.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,22 +13,28 @@ namespace Diplom.Controllers
     public class TicketController : ControllerBase
     {
         private readonly ITicketRepo _repo;
-        public TicketController(ITicketRepo repo)
+        private readonly IMapper _mapper;
+        public TicketController(ITicketRepo repo, IMapper mapper)
         {
             _repo = repo;
+            _mapper = mapper;
         }
 
         [HttpPost]
-        public async Task<ActionResult<string>> CreateTicket(TicketCreateDto dto)
+        public async Task<ActionResult<Ticket>> CreateTicket(TicketCreateDto dto)
         {
-            string urlToReturn =  await _repo.Create(dto);
-            return Ok(urlToReturn);
+            var userId = User.GetUserId();
+            dto.UserId = userId;
+            var model = await _repo.Create(dto);
+            return CreatedAtAction(nameof(GetById), new { id = model.Id },model);
         }
-        [HttpGet]
-        public async Task<ActionResult<Ticket>> GetById(Guid id)
+        [HttpGet("{id}")]
+        public async Task<ActionResult<TicketDto>> GetById(Guid id)
         {
-            var model = await _repo.GetById(id);
-            return Ok(model);
+            var userId = User.GetUserId();
+            var model = await _repo.GetById(id,userId);
+            var mappingToReturn = _mapper.Map<TicketDto>(model);
+            return Ok(mappingToReturn);
         }
     }
 }

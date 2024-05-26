@@ -28,6 +28,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\assets\qrcodes\" />
+    <Folder Include="wwwroot\assets\Новая папка\" />
   </ItemGroup>
 
 </Project>
