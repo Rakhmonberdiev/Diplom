@@ -19,7 +19,7 @@ app.UseCors(builder => builder
 .AllowAnyHeader()
 .AllowAnyMethod()
 .AllowCredentials()
-.WithOrigins("http://localhost:4200"));
+.WithOrigins("http://xura.jr-blog.uz"));
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -28,13 +28,14 @@ if (app.Environment.IsDevelopment())
 }
 
 
-app.UseDefaultFiles();
-app.UseStaticFiles();
+
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
-
+app.UseDefaultFiles();
+app.UseStaticFiles();
 app.MapControllers();
+app.MapFallbackToController("Index", "Fallback");
 using var scope = app.Services.CreateScope();
 var services = scope.ServiceProvider;
 try
