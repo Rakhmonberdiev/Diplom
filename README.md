@@ -41,4 +41,5 @@
 ## Структура базы данных
 
 Ниже приведена структура базы данных:
-[Структура базы данных](https://github.com/Rakhmonberdiev/Diplom/blob/master/Baza.drawio.png)
+
+![Структура базы данных](https://github.com/[Rakhmonberdiev]/[Diplom]/blob/[master]/Baza.png?raw=true)
