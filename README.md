@@ -1,6 +1,9 @@
-# Название проекта
+# Ride-ticket
 
 Краткое описание: Веб-приложение для бронирования билетов на маршрутки с функциями регистрации, авторизации, поиска и бронирования билетов, генерации QR-кода и просмотра истории бронирования.
+
+## Фронтенд
+[Фронтенд](https://github.com/Rakhmonberdiev/DiplomClientApp)
 
 ## Технологии
 
@@ -43,3 +46,21 @@
 Ниже приведена структура базы данных:
 
 ![Структура базы данных](https://github.com/Rakhmonberdiev/Diplom/blob/master/Baza.png?raw=true)
+
+## Скриншоты
+Главная страница:
+![scren1](https://github.com/Rakhmonberdiev/Diplom/blob/master/scren1.png?raw=true)
+![scren2](https://github.com/Rakhmonberdiev/Diplom/blob/master/scren2.png?raw=true)
+![scren3](https://github.com/Rakhmonberdiev/Diplom/blob/master/scren3.png?raw=true)
+
+Админ-панель:
+![scren4](https://github.com/Rakhmonberdiev/Diplom/blob/master/scren4.png?raw=true)
+![scren5](https://github.com/Rakhmonberdiev/Diplom/blob/master/scren5.png?raw=true)
+
+Регистрация:
+![scren6](https://github.com/Rakhmonberdiev/Diplom/blob/master/scren6.png?raw=true)
+
+
+## Дополнительная информация
+
+[jr-blog.uz](https://jr-blog.uz)
