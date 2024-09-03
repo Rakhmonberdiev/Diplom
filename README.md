@@ -42,4 +42,4 @@
 
 Ниже приведена структура базы данных:
 
-![Структура базы данных](https://github.com/[Rakhmonberdiev]/[Diplom]/blob/[master]/Baza.png?raw=true)
+![Структура базы данных](https://github.com/Rakhmonberdiev/Diplom/blob/master/Baza.png?raw=true)
