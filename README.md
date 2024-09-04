@@ -9,8 +9,9 @@
 
 - .NET Core
 - Entity Framework Core
-- ASP.NET Core
-- PostgreSQL (в качестве базы данных)
+- AutoMapper
+- QrCoder
+- PostgreSQL
 - JWT для аутентификации
 - Хеширование паролей
 
